@@ -7,7 +7,7 @@ public class InfoService extends IntentService
 {
 	public InfoService()
 	{
-		super("");
+		super("InfoService");
 	}
 
 	@Override
