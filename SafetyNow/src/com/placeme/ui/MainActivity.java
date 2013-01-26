@@ -1,6 +1,5 @@
 package com.placeme.ui;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
@@ -10,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -18,7 +18,7 @@ import com.placeme.R;
 import com.placeme.services.LocationService;
 import com.placeme.views.DrawerView;
 
-public class MainActivity extends Activity
+public class MainActivity extends FragmentActivity
 {
 
 	public static final String	TAG	= MainActivity.class.getSimpleName();
@@ -64,6 +64,12 @@ public class MainActivity extends Activity
 		mLat = mSharedPrefs.getInt(LocationService.LAT, -1);
 		mLon = mSharedPrefs.getInt(LocationService.LON, -1);
 		Log.v(TAG, String.format("Read location %d, %d from SharedPrefs.", mLat, mLon));
+
+		// Add fragment
+		if (savedInstanceState == null)
+		{
+			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).commit();
+		}
 	}
 
 	@Override

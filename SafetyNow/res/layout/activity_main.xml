@@ -9,19 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#444"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" >
+        android:clickable="true" >
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/container_V"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#900"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" >
+        android:background="#F9F9F9"
+        android:clickable="true" >
     </FrameLayout>
 
 </com.placeme.views.DrawerView>
