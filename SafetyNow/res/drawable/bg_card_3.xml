@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:bottom="@dimen/margin_normal"
+        android:left="@dimen/margin_normal"
+        android:right="@dimen/margin_normal"
+        android:top="@dimen/margin_normal">
+        <shape>
+            <solid android:color="@color/bg_card" />
+
+            <corners android:radius="4dp" />
+
+            <stroke
+                android:width="@dimen/card_separator"
+                android:color="#7F669900" />
+        </shape>
+    </item>
+
+</layer-list>

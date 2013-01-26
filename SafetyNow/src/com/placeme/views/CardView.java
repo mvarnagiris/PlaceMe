@@ -40,10 +40,7 @@ public abstract class CardView extends ViewGroup
 	public CardView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-
-		int padding = getResources().getDimensionPixelSize(R.dimen.margin_normal);
-		setBackgroundResource(R.drawable.bg_card);
-		setPadding(padding, padding, padding, padding);
+		int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_normal);
 
 		// Init
 		SEPARATOR_HEIGHT = getResources().getDimensionPixelSize(R.dimen.card_separator);
@@ -57,12 +54,11 @@ public abstract class CardView extends ViewGroup
 
 		// Init views
 		caret_IV = new ImageView(context);
-		caret_IV.setImageResource(R.drawable.ic_action_expand);
 		title_TV = new TextView(context);
 		title_TV.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_large));
-		title_TV.setTextColor(accent);
 		title_TV.setPadding(padding * 2, 0, 0, 0);
 		title_TV.setTypeface(Typeface.createFromAsset(context.getAssets(), "font/Roboto-Light.ttf"));
+		title_TV.setVisibility(View.INVISIBLE);
 		content_V = initContentView(context);
 
 		// Add views
@@ -82,11 +78,41 @@ public abstract class CardView extends ViewGroup
 	// Instance
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static CardView newInstance(Context context, CardInfo cardInfo)
+	public static CardView newInstance(Context context, CardInfo cardInfo, int position)
 	{
 		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : new WebCardView(context);
 		card_V.setTitle(cardInfo.getTitle());
 		card_V.setData(cardInfo.getContent());
+		switch (position)
+		{
+			case 0:
+				card_V.setBackgroundResource(R.drawable.bg_card_1);
+				card_V.setCaret(R.drawable.ic_action_expand);
+				break;
+
+			case 1:
+				card_V.setBackgroundResource(R.drawable.bg_card_2);
+				card_V.setCaret(R.drawable.ic_action_expand_2);
+				break;
+
+			case 2:
+				card_V.setBackgroundResource(R.drawable.bg_card_3);
+				card_V.setCaret(R.drawable.ic_action_expand_3);
+				break;
+
+			case 3:
+				card_V.setBackgroundResource(R.drawable.bg_card_4);
+				card_V.setCaret(R.drawable.ic_action_expand_2);
+				break;
+
+			default:
+				card_V.setBackgroundResource(R.drawable.bg_card_1);
+				card_V.setCaret(R.drawable.ic_action_expand);
+				break;
+		}
+
+		int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_normal);
+		card_V.setPadding(padding, padding, padding, padding);
 
 		return card_V;
 	}
@@ -107,7 +133,7 @@ public abstract class CardView extends ViewGroup
 
 		title_TV.measure(wMS, hMS);
 
-		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight() - getPaddingTop() - getPaddingBottom() - SEPARATOR_HEIGHT
+		final int contentHMS = MeasureSpec.makeMeasureSpec(height - getPaddingTop() - getPaddingBottom() - SEPARATOR_HEIGHT
 						- SEPARATOR_HEIGHT, MeasureSpec.EXACTLY);
 		content_V.measure(MeasureSpec.makeMeasureSpec(width - (title_TV.getPaddingLeft()), MeasureSpec.EXACTLY), contentHMS);
 
@@ -122,7 +148,7 @@ public abstract class CardView extends ViewGroup
 		final int left = getPaddingLeft();
 
 		title_TV.layout(left, top, getMeasuredWidth() - getPaddingRight(), top + title_TV.getMeasuredHeight());
-		content_V.layout(left + title_TV.getPaddingLeft() / 2, title_TV.getBottom(), title_TV.getRight() - title_TV.getPaddingLeft() / 2, title_TV.getBottom()
+		content_V.layout(left + title_TV.getPaddingLeft() / 2, title_TV.getTop(), title_TV.getRight() - title_TV.getPaddingLeft() / 2, title_TV.getTop()
 						+ content_V.getMeasuredHeight());
 		caret_IV.layout(title_TV.getRight() - caret_IV.getMeasuredWidth() - title_TV.getPaddingLeft(), content_V.getBottom() - caret_IV.getMeasuredHeight()
 						+ (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()),
@@ -138,6 +164,11 @@ public abstract class CardView extends ViewGroup
 		title_TV.setText(title);
 	}
 
+	public void setCaret(int drawableRes)
+	{
+		caret_IV.setBackgroundResource(drawableRes);
+	}
+	
 	// Abstract methods
 	// --------------------------------------------------------------------------------------------------------------------------------
 

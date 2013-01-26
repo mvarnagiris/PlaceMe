@@ -47,9 +47,11 @@ public class CardsFragment extends Fragment
 	public void bind(Place place, ArrayList<CardInfo> cardInfoArray)
 	{
 		cardsContainer_V.removeViewsInLayout(1, cardsContainer_V.getChildCount() - 1);
+		int position = 0;
 		for (CardInfo cardInfo : cardInfoArray)
 		{
-			cardsContainer_V.addView(CardView.newInstance(getActivity(), cardInfo));
+			cardsContainer_V.addView(CardView.newInstance(getActivity(), cardInfo, position));
+			position++;
 		}
 
 		locationTitle.setText(place.getName());
