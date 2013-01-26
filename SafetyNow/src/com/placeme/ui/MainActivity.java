@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.placeme.Consts;
@@ -127,6 +128,13 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mReceiver);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.common, menu);
+		return true;
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
