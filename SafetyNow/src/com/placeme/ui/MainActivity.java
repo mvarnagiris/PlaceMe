@@ -1,5 +1,6 @@
 package com.placeme.ui;
 
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
@@ -12,7 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.MenuItem;
 
 import com.placeme.R;
 import com.placeme.services.LocationService;
@@ -36,26 +37,13 @@ public class MainActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// ActionBar
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(true);
+
 		// Get views
 		drawer_V = (DrawerView) findViewById(R.id.drawer_V);
-		drawer_V.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			@Override
-			public void onGlobalLayout()
-			{
-
-				drawer_V.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-				// Opening this in a delayed runnable makes it look smoother.
-				drawer_V.postDelayed(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						drawer_V.openDrawer(true);
-					}
-				}, 300);
-			}
-		});
 
 		mReceiver = new LocationReceiver();
 		mFilter = new IntentFilter(LocationService.ACTION_LOCATE_ME);
@@ -68,7 +56,7 @@ public class MainActivity extends FragmentActivity
 		// Add fragment
 		if (savedInstanceState == null)
 		{
-			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).add(R.id.container_V, new CardsFragment()).commit();
 		}
 	}
 
@@ -88,6 +76,20 @@ public class MainActivity extends FragmentActivity
 	{
 		super.onPause();
 		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mReceiver);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case android.R.id.home:
+			{
+				drawer_V.toggle(true);
+				return true;
+			}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private class LocationReceiver extends BroadcastReceiver

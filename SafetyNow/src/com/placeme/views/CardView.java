@@ -1,6 +1,7 @@
 package com.placeme.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -25,6 +26,9 @@ public class CardView extends ViewGroup
 	{
 		super(context, attrs, defStyle);
 
+		// TODO TEMP
+		setBackgroundColor(Color.RED);
+
 		// Init views
 		web_V = WebViewUtils.createWebView(context);
 	}
@@ -36,12 +40,7 @@ public class CardView extends ViewGroup
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
 		final int width = MeasureSpec.getSize(widthMeasureSpec);
-		final int wMS = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
-		final int hMS = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-		int height = 0;
-
-		web_V.measure(wMS, hMS);
-		height += web_V.getMeasuredHeight();
+		final int height = width * 2 / 3;
 
 		setMeasuredDimension(width, height);
 	}
