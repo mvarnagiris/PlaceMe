@@ -3,12 +3,14 @@ package com.placeme.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,19 +22,24 @@ public class LocationService extends Service implements LocationListener {
 
 	public static final String	TAG					= LocationService.class.getSimpleName();
 	public static final String	ACTION_LOCATE_ME	= "com.placeme.action.LOCATE_ME";
-	public static final String	EXTRA_LOCATION		= "location";
+	public static final String	LAT					= "lat";
+	public static final String	LON					= "lon";
 
 	private static final int	TWO_MINUTES			= 1000 * 60 * 2;
 	private static final int	MIN_TIME_MS			= 0;
 	private static final int	MIN_DIST_M			= 0;
 
+	private SharedPreferences	mSharedPrefs;
 	private LocationManager		mLocationManager;
 	private Criteria			mCriteria;
 	private String				mBestProvider;
 	private Location			mLocation;
+	private int					mLat;
+	private int					mLon;
 
 	@Override
 	public void onCreate() {
+		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		mCriteria = new Criteria();
 		mCriteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -58,7 +65,9 @@ public class LocationService extends Service implements LocationListener {
 					Location location = mLocationManager.getLastKnownLocation(mBestProvider);
 					if (isBetterLocation(location, mLocation)) {
 						mLocation = location;
-						broadcastLocation(mLocation);
+					}
+					if (null != mLocation) {
+						updateCurrentLocation();
 					}
 					else {
 						mLocationManager.requestLocationUpdates(mBestProvider, MIN_TIME_MS, MIN_DIST_M, this);
@@ -71,11 +80,18 @@ public class LocationService extends Service implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
+		mLocationManager.removeUpdates(this);
 		Toast.makeText(this, R.string.location_acquired, Toast.LENGTH_LONG).show();
 		if (isBetterLocation(location, mLocation)) {
 			mLocation = location;
-			broadcastLocation(mLocation);
 		}
+		if (null != mLocation) {
+			updateCurrentLocation();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
 		mLocationManager.removeUpdates(this);
 	}
 
@@ -148,16 +164,23 @@ public class LocationService extends Service implements LocationListener {
 		return provider1.equals(provider2);
 	}
 
-	private void broadcastLocation(Location location) {
-		if (null != location) {
-			Log.v(TAG, String.format("Location acquired %f, %f", location.getLatitude(), location.getLongitude()));
-			Intent result = new Intent(ACTION_LOCATE_ME);
-			result.putExtra(EXTRA_LOCATION, mLocation);
-			LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(result);
-		}
-		else {
-			Log.w(TAG, "Location is null.");
-		}
+	private void updateCurrentLocation() {
+		mLat = (int) (mLocation.getLatitude() * 1e6);
+		mLon = (int) (mLocation.getLongitude() * 1e6);
+		Log.v(TAG, String.format("Current location is %d, %d", mLat, mLon));
+		storeLocation();
+		broadcastLocation();
+		stopSelf();
 	}
 
+	private void broadcastLocation() {
+		Intent result = new Intent(ACTION_LOCATE_ME);
+		result.putExtra(LAT, mLat).putExtra(LON, mLon);
+		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(result);
+	}
+
+	private void storeLocation() {
+		boolean stored = mSharedPrefs.edit().putInt(LAT, mLat).putInt(LON, mLon).commit();
+		Log.v(TAG, "Stored current location in SharedPrefs:" + stored);
+	}
 }
