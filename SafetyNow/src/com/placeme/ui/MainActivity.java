@@ -15,7 +15,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.placeme.Consts;
 import com.placeme.R;
+import com.placeme.services.InfoService;
 import com.placeme.services.LocationService;
 import com.placeme.ui.MenuFragment.MenuListener;
 import com.placeme.views.DrawerView;
@@ -53,9 +55,8 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		mFilter = new IntentFilter(LocationService.ACTION_LOCATE_ME);
 
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		mLat = mSharedPrefs.getInt(LocationService.LAT, -1);
-		mLon = mSharedPrefs.getInt(LocationService.LON, -1);
-		Log.v(TAG, String.format("Read location %d, %d from SharedPrefs.", mLat, mLon));
+		mLat = mSharedPrefs.getInt(Consts.LAT, -1);
+		mLon = mSharedPrefs.getInt(Consts.LON, -1);
 
 		// Add fragment
 		menu_F = (MenuFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_MENU);
@@ -74,6 +75,10 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		if ((-1 == mLat || -1 == mLon) && !isServiceRunning(LocationService.class))
 		{
 			startService(new Intent(getApplicationContext(), LocationService.class).setAction(LocationService.ACTION_LOCATE_ME));
+		}
+		else {
+			Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
+			fetchDataForLocation();
 		}
 	}
 
@@ -106,7 +111,11 @@ public class MainActivity extends FragmentActivity implements MenuListener
 			String action = intent.getAction();
 			if (LocationService.ACTION_LOCATE_ME.equals(action))
 			{
-				Log.d(TAG, String.format("Got location %d, %d", intent.getIntExtra(LocationService.LAT, -1), intent.getIntExtra(LocationService.LON, -1)));
+				mLat = intent.getIntExtra(Consts.LAT, -1);
+				mLon = intent.getIntExtra(Consts.LON, -1);
+				Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
+				fetchDataForLocation();
+
 			}
 		}
 	}
@@ -129,5 +138,10 @@ public class MainActivity extends FragmentActivity implements MenuListener
 	{
 		getActionBar().setTitle(title);
 		drawer_V.closeDrawer(true);
+	}
+
+	private void fetchDataForLocation() {
+		startService(new Intent(getApplicationContext(), InfoService.class).putExtra(Consts.LAT, mLat).putExtra(
+				Consts.LON, mLon));
 	}
 }
