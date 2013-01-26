@@ -10,6 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+        
+        <RelativeLayout 
+            android:id="@+id/location_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            android:background="@drawable/card_background"
+            android:paddingTop="12dp"
+            android:paddingBottom="14dp">
+            
+            <ImageView 
+                android:id="@+id/location_img"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_location"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true" />
+            
+            <TextView android:id="@+id/location_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/location_img"
+                android:textColor="#000"
+                android:textSize="32sp" />
+            
+            <TextView android:id="@+id/location_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/location_title"
+                android:layout_toRightOf="@+id/location_img"
+                android:layout_marginTop="-4dp"
+                android:fontFamily="sans-serif-condensed" 
+                android:textAllCaps="true"
+                android:textColor="#666"
+                android:textSize="16sp" />
+            
+        </RelativeLayout>
+        
     </LinearLayout>
 
 </ScrollView>

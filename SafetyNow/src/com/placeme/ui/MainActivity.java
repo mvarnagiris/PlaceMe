@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity implements MenuListener
 				ArrayList<CardInfo> cards = (ArrayList<CardInfo>) intent.getSerializableExtra(Consts.CARDS);
 				Log.d(TAG, String.format("Got place %s and data %s", place, cards.toString()));
 
-				cards_F.bind(cards);
+				cards_F.bind(place, cards);
 			}
 		}
 	}
@@ -79,6 +79,7 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setTitle(R.string.menu_live_here);
 
 		// Get views
 		drawer_V = (DrawerView) findViewById(R.id.drawer_V);

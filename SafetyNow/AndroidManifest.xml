@@ -22,8 +22,7 @@
         <!-- Activities -->
         <!-- ======================================================================================================== -->
         <activity
-            android:name="com.placeme.ui.MainActivity"
-            android:label="@string/menu_live_here" >
+            android:name="com.placeme.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
