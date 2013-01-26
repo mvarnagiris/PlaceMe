@@ -50,7 +50,7 @@ public abstract class CardView extends ViewGroup
 	{
 		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : null;
 		card_V.setTitle(cardInfo.getTitle());
-		card_V.setData(cardInfo.getUrl());
+		card_V.setData(cardInfo.getContent());
 
 		return card_V;
 	}

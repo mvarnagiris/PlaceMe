@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class CardInfo implements Serializable {
 	private static final long	serialVersionUID	= 8777612934304299447L;
 
-	private String	title;
-	private String	url;
-	private String	type;
+	private String				title;
+	private String				content;
+	private String				type;
 
 	public String getTitle() {
 		return title;
@@ -17,12 +17,12 @@ public class CardInfo implements Serializable {
 		this.title = title;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getContent() {
+		return content;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setContent(String url) {
+		this.content = url;
 	}
 
 	public String getType() {
@@ -36,8 +36,8 @@ public class CardInfo implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("CardInfo [title=").append(title).append(", url=").append(url).append(", type=").append(type)
-				.append("]");
+		builder.append("CardInfo [title=").append(title).append(", content=").append(content).append(", type=")
+				.append(type).append("]");
 		return builder.toString();
 	}
 }

@@ -24,14 +24,13 @@ import com.google.gson.JsonParser;
 import com.placeme.BuildConfig;
 import com.placeme.Consts;
 import com.placeme.model.CardInfo;
+import com.placeme.model.Place;
 
 public class InfoService extends IntentService {
 
 	private static final String	BASE_URL		= "http://dia.offsetdesign.co.uk/api/data.json";
 
 	private static final String	TAG				= "InfoService";
-	private static final String	JSON_TITLE		= "title";
-	private static final String	JSON_DATASETS	= "datasets";
 
 	public InfoService() {
 		super("InfoService");
@@ -50,9 +49,9 @@ public class InfoService extends IntentService {
 		try {
 			response = makeRequest(url);
 			if (!TextUtils.isEmpty(response)) {
-				Pair<String, ArrayList<CardInfo>> result = parseCardsInfo(response);
+				Pair<Place, ArrayList<CardInfo>> result = parseCardsInfo(response);
 				Intent resultIntent = new Intent(Consts.ACTION_GET_DATA);
-				resultIntent.putExtra(Consts.TITLE, result.first);
+				resultIntent.putExtra(Consts.PLACE, result.first);
 				resultIntent.putExtra(Consts.CARDS, result.second);
 				LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(resultIntent);
 			}
@@ -156,21 +155,23 @@ public class InfoService extends IntentService {
 		return sb.toString();
 	}
 
-	private Pair<String, ArrayList<CardInfo>> parseCardsInfo(String response) {
+	private Pair<Place, ArrayList<CardInfo>> parseCardsInfo(String response) {
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		JsonObject rootObj = parser.parse(response).getAsJsonObject();
-		String title = rootObj.get(JSON_TITLE).getAsString();
+		JsonObject placeObj = rootObj.get(Consts.JSON_LOCATION).getAsJsonObject();
+
+		Place place = gson.fromJson(placeObj, Place.class);
 		ArrayList<CardInfo> cards = new ArrayList<CardInfo>();
 
-		JsonArray datasetArr = rootObj.get(JSON_DATASETS).getAsJsonArray();
-		if (null != datasetArr) {
-			int size = datasetArr.size();
+		JsonArray array = rootObj.get(Consts.JSON_DATASETS).getAsJsonArray();
+		if (null != array) {
+			int size = array.size();
 			for (int i = 0; i < size; i++) {
-				cards.add(gson.fromJson(datasetArr.get(i), CardInfo.class));
+				cards.add(gson.fromJson(array.get(i), CardInfo.class));
 			}
 		}
-		return new Pair<String, ArrayList<CardInfo>>(title, cards);
+		return new Pair<Place, ArrayList<CardInfo>>(place, cards);
 	}
 
 }
