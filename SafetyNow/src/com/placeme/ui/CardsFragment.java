@@ -8,14 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.placeme.R;
 import com.placeme.model.CardInfo;
+import com.placeme.model.Place;
 import com.placeme.views.CardView;
 
 public class CardsFragment extends Fragment
 {
 	private LinearLayout	cardsContainer_V;
+	private RelativeLayout	locationContainer;
+	private TextView		locationTitle;
+	private TextView		locationSubtitle;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -30,17 +36,23 @@ public class CardsFragment extends Fragment
 
 		// Get views
 		cardsContainer_V = (LinearLayout) view.findViewById(R.id.cardsContainer_V);
+		locationContainer = (RelativeLayout) view.findViewById(R.id.location_container);
+		locationTitle = (TextView) locationContainer.findViewById(R.id.location_title);
+		locationSubtitle = (TextView) locationContainer.findViewById(R.id.location_subtitle);
 	}
 
 	// Public methods
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public void bind(ArrayList<CardInfo> cardInfoArray)
+	public void bind(Place place, ArrayList<CardInfo> cardInfoArray)
 	{
-		cardsContainer_V.removeAllViews();
+		cardsContainer_V.removeViewsInLayout(1, cardsContainer_V.getChildCount() - 1);
 		for (CardInfo cardInfo : cardInfoArray)
 		{
 			cardsContainer_V.addView(CardView.newInstance(getActivity(), cardInfo));
 		}
+
+		locationTitle.setText(place.getName());
+		locationSubtitle.setText(place.getConnurbation() + ", " + place.getPostcode());
 	}
 }
