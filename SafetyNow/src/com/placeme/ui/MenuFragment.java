@@ -66,7 +66,7 @@ public class MenuFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.menu_item, R.id.item, mTitles));
 		ListView listView = getListView();
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		listView.setItemChecked(mPosition, true);
 	}
 
