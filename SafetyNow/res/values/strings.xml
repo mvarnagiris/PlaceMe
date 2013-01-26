@@ -6,7 +6,7 @@
     <string name="enable_location_settings">Please enable a location source (either GPS or network).</string>
     <string name="location_acquired">We\'ve got your location!</string>
     
-    <string name="menu_title">I want to know</string>
+    <string name="menu_title">I want to</string>
     <string name="menu_live_here">Live here</string>
     <string name="menu_work_here">Work here</string>
     
