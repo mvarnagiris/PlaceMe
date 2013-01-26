@@ -11,41 +11,38 @@ import org.apache.http.HttpStatus;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.placeme.BuildConfig;
+import com.placeme.Consts;
 
-public class InfoService extends IntentService
-{
-	public static final String	EXTRA_LAT	= "EXTRA_LAT";
-	public static final String	EXTRA_LNG	= "EXTRA_LNG";
-	public static final String	EXTRA_TYPE	= "EXTRA_TYPE";
+public class InfoService extends IntentService {
 
 	private static final String	BASE_URL	= "";				// FIXME Add proper URL
 
 	private static final String	TAG			= "InfoService";
 
-	public InfoService()
-	{
+	public InfoService() {
 		super("InfoService");
 	}
 
 	@Override
-	protected void onHandleIntent(Intent intent)
-	{
+	protected void onHandleIntent(Intent intent) {
 		// Get values
-		final double lat = intent.getDoubleExtra(EXTRA_LAT, 0);
-		final double lng = intent.getDoubleExtra(EXTRA_LNG, 0);
-		final int type = intent.getIntExtra(EXTRA_TYPE, 0);
+		final double lat = intent.getIntExtra(Consts.LAT, 0) / 1e6;
+		final double lng = intent.getIntExtra(Consts.LON, 0) / 1e6;
+		final String categ = intent.getStringExtra(Consts.CATEG);
 
-		final String url = BASE_URL + "/?lat=" + lat + "&lng=" + lng + "&type=" + type;
+		final String url = BASE_URL + "/?lat=" + lat + "&lng=" + lng + "&type=" + categ;
 		String response = null;
-		try
-		{
+		try {
 			response = makeRequest(url);
+			if (!TextUtils.isEmpty(response)) {
+				//parseCardsInfo(response);
+			}
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			Log.e(TAG, "Request failed", e);
 		}
 
@@ -65,8 +62,7 @@ public class InfoService extends IntentService
 	 * @throws Exception
 	 *             Any exception.
 	 */
-	protected HttpURLConnection getConnection(String url) throws Exception
-	{
+	protected HttpURLConnection getConnection(String url) throws Exception {
 		// Prepare connection
 		final HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.setConnectTimeout(30000);
@@ -83,7 +79,8 @@ public class InfoService extends IntentService
 	}
 
 	/**
-	 * Makes a request to given to given URL with given data to upload and additional parameters to set on connection.
+	 * Makes a request to given to given URL with given data to upload and additional parameters to
+	 * set on connection.
 	 * 
 	 * @param url
 	 *            URL for connection.
@@ -91,11 +88,9 @@ public class InfoService extends IntentService
 	 * @throws Exception
 	 *             Any exception.
 	 */
-	protected String makeRequest(String url) throws Exception
-	{
+	protected String makeRequest(String url) throws Exception {
 		// Debug log
-		if (BuildConfig.DEBUG)
-		{
+		if (BuildConfig.DEBUG) {
 			Log.i(TAG, "---------------------------------------------------------");
 			Log.i(TAG, "GET " + url);
 			Log.i(TAG, "---------------------------------------------------------");
@@ -112,25 +107,19 @@ public class InfoService extends IntentService
 		String response = null;
 
 		// If request was not successful, read error
-		if (responseCode == HttpStatus.SC_OK)
-		{
-			try
-			{
+		if (responseCode == HttpStatus.SC_OK) {
+			try {
 				is = connection.getInputStream();
 				response = readInputStream(is);
 			}
-			finally
-			{
-				if (is != null)
-					is.close();
-				if (connection != null)
-					connection.disconnect();
+			finally {
+				if (is != null) is.close();
+				if (connection != null) connection.disconnect();
 			}
 		}
 
 		// Debug log
-		if (BuildConfig.DEBUG)
-		{
+		if (BuildConfig.DEBUG) {
 			Log.i(TAG, "=========================================================");
 			Log.i(TAG, "Request " + url);
 			Log.i(TAG, "Response code : " + responseCode);
@@ -141,8 +130,7 @@ public class InfoService extends IntentService
 		return response;
 	}
 
-	public static String readInputStream(InputStream is) throws IOException
-	{
+	public static String readInputStream(InputStream is) throws IOException {
 		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		StringBuilder sb = new StringBuilder();
 		String s = null;
@@ -152,4 +140,5 @@ public class InfoService extends IntentService
 
 		return sb.toString();
 	}
+
 }

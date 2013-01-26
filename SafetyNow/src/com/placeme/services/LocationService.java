@@ -16,14 +16,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.placeme.Consts;
 import com.placeme.R;
 
 public class LocationService extends Service implements LocationListener {
 
 	public static final String	TAG					= LocationService.class.getSimpleName();
 	public static final String	ACTION_LOCATE_ME	= "com.placeme.action.LOCATE_ME";
-	public static final String	LAT					= "lat";
-	public static final String	LON					= "lon";
 
 	private static final int	TWO_MINUTES			= 1000 * 60 * 2;
 	private static final int	MIN_TIME_MS			= 0;
@@ -175,12 +174,12 @@ public class LocationService extends Service implements LocationListener {
 
 	private void broadcastLocation() {
 		Intent result = new Intent(ACTION_LOCATE_ME);
-		result.putExtra(LAT, mLat).putExtra(LON, mLon);
+		result.putExtra(Consts.LAT, mLat).putExtra(Consts.LON, mLon);
 		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(result);
 	}
 
 	private void storeLocation() {
-		boolean stored = mSharedPrefs.edit().putInt(LAT, mLat).putInt(LON, mLon).commit();
+		boolean stored = mSharedPrefs.edit().putInt(Consts.LAT, mLat).putInt(Consts.LON, mLon).commit();
 		Log.v(TAG, "Stored current location in SharedPrefs:" + stored);
 	}
 }
