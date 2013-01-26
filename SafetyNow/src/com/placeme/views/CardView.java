@@ -48,9 +48,9 @@ public abstract class CardView extends ViewGroup
 
 	public static CardView newInstance(Context context, CardInfo cardInfo)
 	{
-		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : null;
+		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : new WebCardView(context);
 		card_V.setTitle(cardInfo.getTitle());
-		card_V.setData(cardInfo.getUrl());
+		card_V.setData(cardInfo.getContent());
 
 		return card_V;
 	}

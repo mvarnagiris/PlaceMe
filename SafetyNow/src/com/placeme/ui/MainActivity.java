@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import com.placeme.Consts;
 import com.placeme.R;
 import com.placeme.model.CardInfo;
+import com.placeme.model.Place;
 import com.placeme.services.InfoService;
 import com.placeme.services.LocationService;
 import com.placeme.ui.MenuFragment.MenuListener;
@@ -58,10 +59,10 @@ public class MainActivity extends FragmentActivity implements MenuListener
 			}
 			else if (Consts.ACTION_GET_DATA.equals(action))
 			{
-				String title = intent.getStringExtra(Consts.TITLE);
+				Place place = (Place) intent.getSerializableExtra(Consts.PLACE);
 				@SuppressWarnings("unchecked")
 				ArrayList<CardInfo> cards = (ArrayList<CardInfo>) intent.getSerializableExtra(Consts.CARDS);
-				Log.d(TAG, String.format("Got title %s and data %s", title, cards.toString()));
+				Log.d(TAG, String.format("Got place %s and data %s", place, cards.toString()));
 
 				cards_F.bind(cards);
 			}

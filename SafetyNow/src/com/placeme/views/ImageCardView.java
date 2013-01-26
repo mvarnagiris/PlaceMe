@@ -48,7 +48,7 @@ public class ImageCardView extends CardView
 		if (!TextUtils.isEmpty(url) && imageSettings != null && needLoadImage)
 		{
 			needLoadImage = false;
-			imageLoader.loadImage((ImageView) content_V, new URLBitmapInfo(url));
+			imageLoader.loadImage((ImageView) content_V, new URLBitmapInfo(url), imageSettings);
 		}
 	}
 
