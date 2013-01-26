@@ -61,7 +61,7 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		menu_F = (MenuFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_MENU);
 		if (menu_F == null)
 		{
-			//menu_F = MenuFragment.getInstance();
+			menu_F = MenuFragment.getInstance(0);
 			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, menu_F).add(R.id.container_V, new CardsFragment()).commit();
 		}
 	}
@@ -125,8 +125,9 @@ public class MainActivity extends FragmentActivity implements MenuListener
 	}
 
 	@Override
-	public void onPositionChange(int position, String title) {
-		// TODO Auto-generated method stub
-
+	public void onPositionChange(int position, String title)
+	{
+		getActionBar().setTitle(title);
+		drawer_V.closeDrawer(true);
 	}
 }
