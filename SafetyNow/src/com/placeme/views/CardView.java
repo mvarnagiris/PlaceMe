@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.placeme.R;
+import com.placeme.model.CardInfo;
 
 public abstract class CardView extends ViewGroup
 {
@@ -42,6 +43,18 @@ public abstract class CardView extends ViewGroup
 		addView(title_TV);
 	}
 
+	// Instance
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	public static CardView newInstance(Context context, CardInfo cardInfo)
+	{
+		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : null;
+		card_V.setTitle(cardInfo.getTitle());
+		card_V.setData(cardInfo.getUrl());
+
+		return card_V;
+	}
+
 	// Layout
 	// --------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,7 +69,7 @@ public abstract class CardView extends ViewGroup
 
 		title_TV.measure(wMS, hMS);
 
-		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight(), MeasureSpec.EXACTLY);
+		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight() - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY);
 		content_V.measure(wMS, contentHMS);
 
 		setMeasuredDimension(width, height);
@@ -65,7 +78,8 @@ public abstract class CardView extends ViewGroup
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
-		content_V.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingRight());
+		title_TV.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), title_TV.getMeasuredHeight());
+		content_V.layout(getPaddingLeft(), title_TV.getBottom(), title_TV.getRight(), title_TV.getBottom() + content_V.getMeasuredHeight());
 	}
 
 	// Public method
@@ -80,4 +94,6 @@ public abstract class CardView extends ViewGroup
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	protected abstract View initContentView(Context context);
+
+	public abstract void setData(String data);
 }
