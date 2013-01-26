@@ -109,7 +109,7 @@ public abstract class CardView extends ViewGroup
 
 		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight() - getPaddingTop() - getPaddingBottom() - SEPARATOR_HEIGHT
 						- SEPARATOR_HEIGHT, MeasureSpec.EXACTLY);
-		content_V.measure(wMS, contentHMS);
+		content_V.measure(MeasureSpec.makeMeasureSpec(width - (title_TV.getPaddingLeft()), MeasureSpec.EXACTLY), contentHMS);
 
 		setMeasuredDimension(width + getPaddingRight() + getPaddingLeft(),
 						(int) (height + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics())));
@@ -122,7 +122,8 @@ public abstract class CardView extends ViewGroup
 		final int left = getPaddingLeft();
 
 		title_TV.layout(left, top, getMeasuredWidth() - getPaddingRight(), top + title_TV.getMeasuredHeight());
-		content_V.layout(left, title_TV.getBottom(), title_TV.getRight(), title_TV.getBottom() + content_V.getMeasuredHeight());
+		content_V.layout(left + title_TV.getPaddingLeft() / 2, title_TV.getBottom(), title_TV.getRight() - title_TV.getPaddingLeft() / 2, title_TV.getBottom()
+						+ content_V.getMeasuredHeight());
 		caret_IV.layout(title_TV.getRight() - caret_IV.getMeasuredWidth() - title_TV.getPaddingLeft(), content_V.getBottom() - caret_IV.getMeasuredHeight()
 						+ (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()),
 						title_TV.getRight() - title_TV.getPaddingLeft(),
