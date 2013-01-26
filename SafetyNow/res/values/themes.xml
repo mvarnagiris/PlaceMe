@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
+
     </style>
 
     <!-- Application theme. -->
@@ -33,6 +35,55 @@
         <item name="android:listViewStyle">@style/ListViewAppTheme</item>
         <item name="android:listViewWhiteStyle">@style/ListViewAppTheme.White</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemAppTheme</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_apptheme</item>
+        <item name="android:popupMenuStyle">@style/apptheme_PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/apptheme_DropDownListView</item>
+        <item name="android:actionBarTabStyle">@style/apptheme_ActionBarTabStyle</item>
+        <item name="android:actionDropDownStyle">@style/apptheme_DropDownNav</item>
+        <item name="android:actionBarStyle">@style/apptheme_solid_ActionBar</item>
+        <item name="android:panelBackground">@drawable/menu_hardkey_panel_apptheme</item>
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.apptheme.widget</item>
+    </style>
+
+    <style name="apptheme_solid_ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/ab_solid_apptheme</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_apptheme</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_apptheme</item>
+        <item name="android:progressBarStyle">@style/apptheme_ProgressBar</item>
+    </style>
+
+    <style name="apptheme_transparent_ActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_apptheme</item>
+        <item name="android:progressBarStyle">@style/apptheme_ProgressBar</item>
+    </style>
+
+    <style name="apptheme_PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_apptheme</item>
+    </style>
+
+    <style name="apptheme_DropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_apptheme</item>
+    </style>
+
+    <style name="apptheme_ActionBarTabStyle" parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_apptheme</item>
+    </style>
+
+    <style name="apptheme_DropDownNav" parent="@android:style/Widget.Holo.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_apptheme</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_apptheme</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_apptheme</item>
+    </style>
+
+    <style name="apptheme_ProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_apptheme</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.apptheme.widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/apptheme_PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/apptheme_DropDownListView</item>
     </style>
 
 </resources>
