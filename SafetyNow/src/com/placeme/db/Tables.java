@@ -1,4 +1,4 @@
-package com.gdg.infographics.db;
+package com.placeme.db;
 
 import android.provider.BaseColumns;
 

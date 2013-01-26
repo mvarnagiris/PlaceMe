@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gdg.infographics"
+    package="com.placeme"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -17,7 +17,7 @@
         <!-- Activities -->
         <!-- ======================================================================================================== -->
         <activity
-            android:name="com.gdg.infographics.MainActivity"
+            android:name="com.placeme.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +29,8 @@
         <!-- Providers -->
         <!-- ======================================================================================================== -->
         <provider
-            android:name="com.gdg.infographics.providers.MyProvider"
-            android:authorities="com.gdg.infographics.providers.MyProvider"
+            android:name="com.placeme.providers.MyProvider"
+            android:authorities="com.placeme.providers.MyProvider"
             android:exported="false" />
     </application>
 

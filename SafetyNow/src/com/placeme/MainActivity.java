@@ -1,4 +1,4 @@
-package com.gdg.infographics;
+package com.placeme;
 
 import android.app.Activity;
 import android.os.Bundle;

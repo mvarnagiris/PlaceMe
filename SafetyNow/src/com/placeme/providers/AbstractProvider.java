@@ -1,4 +1,4 @@
-package com.gdg.infographics.providers;
+package com.placeme.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.provider.BaseColumns;
 
-import com.gdg.infographics.db.Tables;
+import com.placeme.db.Tables;
 
 public abstract class AbstractProvider extends ContentProvider
 {

@@ -1,4 +1,4 @@
-package com.gdg.infographics.providers;
+package com.placeme.providers;
 
 import android.content.ContentValues;
 import android.database.Cursor;

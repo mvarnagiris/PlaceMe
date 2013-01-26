@@ -1,4 +1,4 @@
-package com.gdg.infographics.providers;
+package com.placeme.providers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
