@@ -22,7 +22,6 @@ import com.placeme.R;
 public class LocationService extends Service implements LocationListener {
 
 	public static final String	TAG					= LocationService.class.getSimpleName();
-	public static final String	ACTION_LOCATE_ME	= "com.placeme.action.LOCATE_ME";
 
 	private static final int	TWO_MINUTES			= 1000 * 60 * 2;
 	private static final int	MIN_TIME_MS			= 0;
@@ -58,7 +57,7 @@ public class LocationService extends Service implements LocationListener {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (null != intent) {
 			String action = intent.getAction();
-			if (ACTION_LOCATE_ME.equals(action)) {
+			if (Consts.ACTION_LOCATE_ME.equals(action)) {
 				updateBestProvider();
 				if (!TextUtils.isEmpty(mBestProvider)) {
 					Location location = mLocationManager.getLastKnownLocation(mBestProvider);
@@ -173,7 +172,7 @@ public class LocationService extends Service implements LocationListener {
 	}
 
 	private void broadcastLocation() {
-		Intent result = new Intent(ACTION_LOCATE_ME);
+		Intent result = new Intent(Consts.ACTION_LOCATE_ME);
 		result.putExtra(Consts.LAT, mLat).putExtra(Consts.LON, mLon);
 		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(result);
 	}

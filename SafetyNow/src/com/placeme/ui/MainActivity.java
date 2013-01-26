@@ -1,5 +1,7 @@
 package com.placeme.ui;
 
+import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 
 import com.placeme.Consts;
 import com.placeme.R;
+import com.placeme.model.CardInfo;
 import com.placeme.services.InfoService;
 import com.placeme.services.LocationService;
 import com.placeme.ui.MenuFragment.MenuListener;
@@ -33,9 +36,29 @@ public class MainActivity extends FragmentActivity implements MenuListener
 	private DrawerView			drawer_V;
 
 	private IntentFilter		mFilter;
-	private LocationReceiver	mReceiver;
+	private LocalReceiver		mReceiver;
 	private SharedPreferences	mSharedPrefs;
 	private int					mLat, mLon;
+
+	private class LocalReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (Consts.ACTION_LOCATE_ME.equals(action)) {
+				mLat = intent.getIntExtra(Consts.LAT, -1);
+				mLon = intent.getIntExtra(Consts.LON, -1);
+				Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
+				fetchDataForLocation();
+
+			}
+			else if (Consts.ACTION_GET_DATA.equals(action)) {
+				String title = intent.getStringExtra(Consts.TITLE);
+				@SuppressWarnings("unchecked")
+				ArrayList<CardInfo> cards = (ArrayList<CardInfo>) intent.getSerializableExtra(Consts.CARDS);
+				Log.d(TAG, String.format("Got title %s and data %s", title, cards.toString()));
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -51,8 +74,10 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		// Get views
 		drawer_V = (DrawerView) findViewById(R.id.drawer_V);
 
-		mReceiver = new LocationReceiver();
-		mFilter = new IntentFilter(LocationService.ACTION_LOCATE_ME);
+		mReceiver = new LocalReceiver();
+		mFilter = new IntentFilter();
+		mFilter.addAction(Consts.ACTION_LOCATE_ME);
+		mFilter.addAction(Consts.ACTION_GET_DATA);
 
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		mLat = mSharedPrefs.getInt(Consts.LAT, -1);
@@ -74,7 +99,7 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mReceiver, mFilter);
 		if ((-1 == mLat || -1 == mLon) && !isServiceRunning(LocationService.class))
 		{
-			startService(new Intent(getApplicationContext(), LocationService.class).setAction(LocationService.ACTION_LOCATE_ME));
+			startService(new Intent(getApplicationContext(), LocationService.class).setAction(Consts.ACTION_LOCATE_ME));
 		}
 		else {
 			Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
@@ -103,23 +128,6 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class LocationReceiver extends BroadcastReceiver
-	{
-		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			String action = intent.getAction();
-			if (LocationService.ACTION_LOCATE_ME.equals(action))
-			{
-				mLat = intent.getIntExtra(Consts.LAT, -1);
-				mLon = intent.getIntExtra(Consts.LON, -1);
-				Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
-				fetchDataForLocation();
-
-			}
-		}
-	}
-
 	private boolean isServiceRunning(Class<?> serviceClass)
 	{
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -144,4 +152,6 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		startService(new Intent(getApplicationContext(), InfoService.class).putExtra(Consts.LAT, mLat).putExtra(
 				Consts.LON, mLon));
 	}
+
+
 }

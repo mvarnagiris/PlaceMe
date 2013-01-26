@@ -6,22 +6,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.apache.http.HttpStatus;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.placeme.BuildConfig;
 import com.placeme.Consts;
+import com.placeme.model.CardInfo;
 
 public class InfoService extends IntentService {
 
-	private static final String	BASE_URL	= "";				// FIXME Add proper URL
+	private static final String	BASE_URL		= "http://dia.offsetdesign.co.uk/api/data.json";
 
-	private static final String	TAG			= "InfoService";
+	private static final String	TAG				= "InfoService";
+	private static final String	JSON_TITLE		= "title";
+	private static final String	JSON_DATASETS	= "datasets";
 
 	public InfoService() {
 		super("InfoService");
@@ -32,14 +42,19 @@ public class InfoService extends IntentService {
 		// Get values
 		final double lat = intent.getIntExtra(Consts.LAT, 0) / 1e6;
 		final double lng = intent.getIntExtra(Consts.LON, 0) / 1e6;
-		final String categ = intent.getStringExtra(Consts.CATEG);
+		//final String categ = intent.getStringExtra(Consts.CATEG);
+		String categ = Consts.CATEG_LIVE_HERE;
 
-		final String url = BASE_URL + "/?lat=" + lat + "&lng=" + lng + "&type=" + categ;
+		final String url = BASE_URL + "/?lat=" + lat + "&long=" + lng + "&cat=" + categ;
 		String response = null;
 		try {
 			response = makeRequest(url);
 			if (!TextUtils.isEmpty(response)) {
-				//parseCardsInfo(response);
+				Pair<String, ArrayList<CardInfo>> result = parseCardsInfo(response);
+				Intent resultIntent = new Intent(Consts.ACTION_GET_DATA);
+				resultIntent.putExtra(Consts.TITLE, result.first);
+				resultIntent.putExtra(Consts.CARDS, result.second);
+				LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(resultIntent);
 			}
 		}
 		catch (Exception e) {
@@ -139,6 +154,23 @@ public class InfoService extends IntentService {
 			sb.append(s);
 
 		return sb.toString();
+	}
+
+	private Pair<String, ArrayList<CardInfo>> parseCardsInfo(String response) {
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		JsonObject rootObj = parser.parse(response).getAsJsonObject();
+		String title = rootObj.get(JSON_TITLE).getAsString();
+		ArrayList<CardInfo> cards = new ArrayList<CardInfo>();
+
+		JsonArray datasetArr = rootObj.get(JSON_DATASETS).getAsJsonArray();
+		if (null != datasetArr) {
+			int size = datasetArr.size();
+			for (int i = 0; i < size; i++) {
+				cards.add(gson.fromJson(datasetArr.get(i), CardInfo.class));
+			}
+		}
+		return new Pair<String, ArrayList<CardInfo>>(title, cards);
 	}
 
 }
