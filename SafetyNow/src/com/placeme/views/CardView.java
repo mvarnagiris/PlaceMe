@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -18,6 +19,8 @@ public abstract class CardView extends ViewGroup
 	protected final int			SEPARATOR_HEIGHT;
 
 	protected final Paint		separatorPaint;
+	protected final Paint		bgPaint;
+	protected final Rect		bgRect	= new Rect();
 
 	protected final TextView	title_TV;
 	protected final View		content_V;
@@ -35,7 +38,7 @@ public abstract class CardView extends ViewGroup
 	public CardView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-		
+
 		int padding = getResources().getDimensionPixelSize(R.dimen.margin_normal);
 		setPadding(padding, padding, padding, padding);
 
@@ -46,16 +49,27 @@ public abstract class CardView extends ViewGroup
 		separatorPaint.setColor(accent);
 		separatorPaint.setStyle(Style.STROKE);
 		separatorPaint.setStrokeWidth(SEPARATOR_HEIGHT);
+		bgPaint = new Paint();
+		bgPaint.setColor(getResources().getColor(R.color.bg_card));
 
 		// Init views
 		title_TV = new TextView(context);
 		title_TV.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_large));
 		title_TV.setTextColor(accent);
+		title_TV.setPadding(padding, 0, 0, 0);
 		content_V = initContentView(context);
 
 		// Add views
 		addView(content_V);
 		addView(title_TV);
+	}
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh)
+	{
+		super.onSizeChanged(w, h, oldw, oldh);
+
+		bgRect.set(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingBottom());
 	}
 
 	// Instance
@@ -76,10 +90,12 @@ public abstract class CardView extends ViewGroup
 	@Override
 	protected void dispatchDraw(Canvas canvas)
 	{
+		canvas.drawRect(bgRect, bgPaint);
+
 		final int left = getPaddingLeft();
 		final int right = getMeasuredWidth() - getPaddingRight();
-		canvas.drawLine(left, SEPARATOR_HEIGHT / 2, right, SEPARATOR_HEIGHT / 2, separatorPaint);
-		
+		canvas.drawLine(left, getPaddingTop() + (SEPARATOR_HEIGHT / 2), right, getPaddingTop() + (SEPARATOR_HEIGHT / 2), separatorPaint);
+
 		final int secondY = getMeasuredHeight() - getPaddingBottom() - (SEPARATOR_HEIGHT / 2);
 		canvas.drawLine(left, secondY, right, secondY, separatorPaint);
 		super.dispatchDraw(canvas);
@@ -103,7 +119,7 @@ public abstract class CardView extends ViewGroup
 						- SEPARATOR_HEIGHT, MeasureSpec.EXACTLY);
 		content_V.measure(wMS, contentHMS);
 
-		setMeasuredDimension(width, height);
+		setMeasuredDimension(width + getPaddingRight() + getPaddingLeft(), height);
 	}
 
 	@Override
