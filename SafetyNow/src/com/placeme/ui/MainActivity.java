@@ -17,9 +17,10 @@ import android.view.MenuItem;
 
 import com.placeme.R;
 import com.placeme.services.LocationService;
+import com.placeme.ui.MenuFragment.MenuListener;
 import com.placeme.views.DrawerView;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends FragmentActivity implements MenuListener
 {
 	public static final String	TAG				= MainActivity.class.getSimpleName();
 
@@ -121,5 +122,11 @@ public class MainActivity extends FragmentActivity
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void onPositionChange(int position, String title) {
+		// TODO Auto-generated method stub
+
 	}
 }
