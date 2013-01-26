@@ -30,8 +30,10 @@ public class MainActivity extends FragmentActivity implements MenuListener
 	public static final String	TAG				= MainActivity.class.getSimpleName();
 
 	private static final String	FRAGMENT_MENU	= "FRAGMENT_MENU";
+	private static final String	FRAGMENT_CARDS	= "FRAGMENT_CARDS";
 
 	private MenuFragment		menu_F;
+	private CardsFragment		cards_F;
 
 	private DrawerView			drawer_V;
 
@@ -40,22 +42,28 @@ public class MainActivity extends FragmentActivity implements MenuListener
 	private SharedPreferences	mSharedPrefs;
 	private int					mLat, mLon;
 
-	private class LocalReceiver extends BroadcastReceiver {
+	private class LocalReceiver extends BroadcastReceiver
+	{
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(Context context, Intent intent)
+		{
 			String action = intent.getAction();
-			if (Consts.ACTION_LOCATE_ME.equals(action)) {
+			if (Consts.ACTION_LOCATE_ME.equals(action))
+			{
 				mLat = intent.getIntExtra(Consts.LAT, -1);
 				mLon = intent.getIntExtra(Consts.LON, -1);
 				Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
 				fetchDataForLocation();
 
 			}
-			else if (Consts.ACTION_GET_DATA.equals(action)) {
+			else if (Consts.ACTION_GET_DATA.equals(action))
+			{
 				String title = intent.getStringExtra(Consts.TITLE);
 				@SuppressWarnings("unchecked")
 				ArrayList<CardInfo> cards = (ArrayList<CardInfo>) intent.getSerializableExtra(Consts.CARDS);
 				Log.d(TAG, String.format("Got title %s and data %s", title, cards.toString()));
+
+				cards_F.bind(cards);
 			}
 		}
 	}
@@ -85,10 +93,12 @@ public class MainActivity extends FragmentActivity implements MenuListener
 
 		// Add fragment
 		menu_F = (MenuFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_MENU);
+		cards_F = (CardsFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_CARDS);
 		if (menu_F == null)
 		{
 			menu_F = MenuFragment.getInstance(0);
-			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, menu_F).add(R.id.container_V, new CardsFragment()).commit();
+			cards_F = new CardsFragment();
+			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, menu_F).add(R.id.container_V, cards_F).commit();
 		}
 	}
 
@@ -101,7 +111,8 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		{
 			startService(new Intent(getApplicationContext(), LocationService.class).setAction(Consts.ACTION_LOCATE_ME));
 		}
-		else {
+		else
+		{
 			Log.d(TAG, String.format("Got location %d, %d", mLat, mLon));
 			fetchDataForLocation();
 		}
@@ -148,10 +159,9 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		drawer_V.closeDrawer(true);
 	}
 
-	private void fetchDataForLocation() {
-		startService(new Intent(getApplicationContext(), InfoService.class).putExtra(Consts.LAT, mLat).putExtra(
-				Consts.LON, mLon));
+	private void fetchDataForLocation()
+	{
+		startService(new Intent(getApplicationContext(), InfoService.class).putExtra(Consts.LAT, mLat).putExtra(Consts.LON, mLon));
 	}
-
 
 }
