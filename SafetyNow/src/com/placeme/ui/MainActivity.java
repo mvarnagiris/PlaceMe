@@ -38,24 +38,6 @@ public class MainActivity extends FragmentActivity
 
 		// Get views
 		drawer_V = (DrawerView) findViewById(R.id.drawer_V);
-		drawer_V.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		{
-			@Override
-			public void onGlobalLayout()
-			{
-
-				drawer_V.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-				// Opening this in a delayed runnable makes it look smoother.
-				drawer_V.postDelayed(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						drawer_V.openDrawer(true);
-					}
-				}, 300);
-			}
-		});
 
 		mReceiver = new LocationReceiver();
 		mFilter = new IntentFilter(LocationService.ACTION_LOCATE_ME);
@@ -68,7 +50,7 @@ public class MainActivity extends FragmentActivity
 		// Add fragment
 		if (savedInstanceState == null)
 		{
-			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).add(R.id.container_V, new CardsFragment()).commit();
 		}
 	}
 
