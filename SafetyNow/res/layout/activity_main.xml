@@ -1,7 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.placeme.views.DrawerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_V"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:layout_height="match_parent" >
 
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/containerDrawer_V"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#444"
+        android:clickable="true" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_V"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F9F9F9"
+        android:clickable="true" >
+    </FrameLayout>
+
+</com.placeme.views.DrawerView>
