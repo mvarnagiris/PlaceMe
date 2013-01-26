@@ -3,4 +3,7 @@
 
     <string name="app_name">PlaceMe</string>
 
+    <string name="enable_location_settings">Please enable a location source (either GPS or network).</string>
+    <string name="location_acquired">We\'ve got your location!</string>
+    
 </resources>
