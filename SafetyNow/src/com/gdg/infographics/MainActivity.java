@@ -1,4 +1,4 @@
-package com.gdg.safetynow;
+package com.gdg.infographics;
 
 import android.app.Activity;
 import android.os.Bundle;
