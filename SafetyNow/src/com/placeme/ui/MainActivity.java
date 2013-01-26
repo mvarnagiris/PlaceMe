@@ -1,6 +1,5 @@
 package com.placeme.ui;
 
-import android.R.menu;
 import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -61,7 +60,8 @@ public class MainActivity extends FragmentActivity
 		menu_F = (MenuFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_MENU);
 		if (menu_F == null)
 		{
-			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).add(R.id.container_V, new CardsFragment()).commit();
+			//menu_F = MenuFragment.getInstance();
+			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, menu_F).add(R.id.container_V, new CardsFragment()).commit();
 		}
 	}
 
