@@ -42,6 +42,13 @@ public abstract class CardView extends ViewGroup
 		addView(title_TV);
 	}
 
+	// Instance
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+//	public static CardView newInstance(CardInfo cardInfo)
+//	{
+//	}
+
 	// Layout
 	// --------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,7 +63,7 @@ public abstract class CardView extends ViewGroup
 
 		title_TV.measure(wMS, hMS);
 
-		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight(), MeasureSpec.EXACTLY);
+		final int contentHMS = MeasureSpec.makeMeasureSpec(height - title_TV.getMeasuredHeight() - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY);
 		content_V.measure(wMS, contentHMS);
 
 		setMeasuredDimension(width, height);
@@ -65,7 +72,8 @@ public abstract class CardView extends ViewGroup
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
-		content_V.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingRight());
+		title_TV.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), title_TV.getMeasuredHeight());
+		content_V.layout(getPaddingLeft(), title_TV.getBottom(), title_TV.getRight(), title_TV.getBottom() + content_V.getMeasuredHeight());
 	}
 
 	// Public method
@@ -74,6 +82,10 @@ public abstract class CardView extends ViewGroup
 	public void setTitle(String title)
 	{
 		title_TV.setText(title);
+	}
+
+	public void bind()
+	{
 	}
 
 	// Abstract methods
