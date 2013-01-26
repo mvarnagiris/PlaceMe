@@ -79,6 +79,7 @@ public class MainActivity extends FragmentActivity implements MenuListener
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setTitle(R.string.menu_live_here);
 
 		// Get views
 		drawer_V = (DrawerView) findViewById(R.id.drawer_V);

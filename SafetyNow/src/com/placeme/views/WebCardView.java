@@ -3,6 +3,7 @@ package com.placeme.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.placeme.utils.WebViewUtils;
 
@@ -35,6 +36,6 @@ public class WebCardView extends CardView
 	@Override
 	public void setData(String data)
 	{
-
+		((WebView) content_V).loadDataWithBaseURL("http://", data, "text/html", "utf-8", null);
 	}
 }
