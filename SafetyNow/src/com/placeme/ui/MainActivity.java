@@ -1,5 +1,6 @@
 package com.placeme.ui;
 
+import android.R.menu;
 import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -21,8 +22,11 @@ import com.placeme.views.DrawerView;
 
 public class MainActivity extends FragmentActivity
 {
+	public static final String	TAG				= MainActivity.class.getSimpleName();
 
-	public static final String	TAG	= MainActivity.class.getSimpleName();
+	private static final String	FRAGMENT_MENU	= "FRAGMENT_MENU";
+
+	private MenuFragment		menu_F;
 
 	private DrawerView			drawer_V;
 
@@ -54,7 +58,8 @@ public class MainActivity extends FragmentActivity
 		Log.v(TAG, String.format("Read location %d, %d from SharedPrefs.", mLat, mLon));
 
 		// Add fragment
-		if (savedInstanceState == null)
+		menu_F = (MenuFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_MENU);
+		if (menu_F == null)
 		{
 			getSupportFragmentManager().beginTransaction().add(R.id.containerDrawer_V, new MenuFragment()).add(R.id.container_V, new CardsFragment()).commit();
 		}

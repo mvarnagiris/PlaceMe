@@ -3,14 +3,12 @@ package com.placeme.views;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
-import com.placeme.utils.WebViewUtils;
-
-public class CardView extends ViewGroup
+public abstract class CardView extends ViewGroup
 {
-	private final WebView	web_V;
+	private final View	content_V;
 
 	public CardView(Context context)
 	{
@@ -30,7 +28,7 @@ public class CardView extends ViewGroup
 		setBackgroundColor(Color.RED);
 
 		// Init views
-		web_V = WebViewUtils.createWebView(context);
+		content_V = initContentView(context);
 	}
 
 	// Layout
@@ -48,6 +46,11 @@ public class CardView extends ViewGroup
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
-		web_V.layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
+		content_V.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingRight());
 	}
+
+	// Abstract methods
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	protected abstract View initContentView(Context context);
 }
