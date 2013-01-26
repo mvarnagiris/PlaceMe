@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.placeme.R;
+import com.placeme.model.CardInfo;
 
 public abstract class CardView extends ViewGroup
 {
@@ -45,9 +46,14 @@ public abstract class CardView extends ViewGroup
 	// Instance
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-//	public static CardView newInstance(CardInfo cardInfo)
-//	{
-//	}
+	public static CardView newInstance(Context context, CardInfo cardInfo)
+	{
+		final CardView card_V = cardInfo.getType().equals("png") ? new ImageCardView(context) : null;
+		card_V.setTitle(cardInfo.getTitle());
+		card_V.setData(cardInfo.getUrl());
+
+		return card_V;
+	}
 
 	// Layout
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -84,12 +90,10 @@ public abstract class CardView extends ViewGroup
 		title_TV.setText(title);
 	}
 
-	public void bind()
-	{
-	}
-
 	// Abstract methods
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	protected abstract View initContentView(Context context);
+
+	public abstract void setData(String data);
 }
