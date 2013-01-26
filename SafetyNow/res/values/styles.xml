@@ -102,15 +102,16 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="MenuTextStyle" parent="android:TextAppearance.Inverse">
+    <style name="MenuTextStyle">
         <item name="android:paddingTop">15dp</item>
         <item name="android:paddingBottom">15dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
+        <item name="android:textColor">@color/menu_item</item>
         <item name="android:background">@drawable/list_selector_holo_light</item>
-        <item name="android:clickable">true</item>
     </style>
 
 </resources>

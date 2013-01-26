@@ -18,4 +18,5 @@
 
 <resources>
     <color name="pressed_apptheme">#CCf0b44c</color>
+    <color name="menu_item">#fff</color>
 </resources>
